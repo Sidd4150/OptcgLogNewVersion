@@ -1,32 +1,27 @@
 /*--Styling for header */
-.logo {
-  height: 80px;
-
-  width: auto;
-
-}
-
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 50px;
+  padding: 0 20px;
+  flex-wrap: wrap;
 }
 
-.about,
-.deckB {
-  margin: 25px;
-
+header .logo {
+  height: 60px;
+  width: auto;
+  margin-bottom: 10px;
 }
 
-a:hover {
-  color: rgb(0, 0, 0);
-  border-color: rgb(0, 0, 0);
+header .nav-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
-
-
-a {
+header .nav-links a {
   text-align: right;
   padding: 10px;
   border-radius: 10px;
@@ -34,7 +29,11 @@ a {
   border-color: rgb(90, 115, 119);
   text-decoration: none;
   color: rgb(90, 115, 119);
+}
 
+header .nav-links a:hover {
+  color: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
 }
 
 /*-- DeckList css-- */
@@ -72,13 +71,13 @@ a {
 .Search {
   display: flex;
   position: relative;
-
   background-size: cover;
-  height: 150px;
   background-image: url("./assets/mapbackground.jpeg");
   justify-content: center;
   align-items: center;
-  padding: 150px;
+  padding: 5%;
+  height: auto;
+  min-height: 250px;
 
 }
 
@@ -102,10 +101,10 @@ a {
   left: 0;
   width: 100%;
   height: 100px;
-  /* fade height */
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #5f7c82 110%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20%, #5f7c82 80%);
+
   pointer-events: none;
-  /* allows clicking through the fade */
+
 }
 
 
@@ -133,31 +132,47 @@ a {
 
 /*--Styling for Search */
 .card_area {
-
-
   background-image: url("./assets/waves.png");
   background-size: 300px 200px;
-  justify-content: center;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  gap: 15px;
 
+
+
+
+}
+
+
+
+.PagnationDiv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 
 }
 
 .pagination {
-  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .paginationBtn {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
   border-radius: 50px;
-  width: 100px;
-  height: 35px;
+  width: auto;
+  height: auto;
   cursor: pointer;
-
-
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
 }
 
 ul {
@@ -173,7 +188,8 @@ ul {
 
 
 .cardIMG {
-  width: 200px;
+  width: 100%;
+  max-width: 200px;
   height: auto;
   border-radius: 5%;
   margin-top: 5%;
@@ -181,6 +197,12 @@ ul {
   transition: transform 0.3s ease-in-out;
 
 }
+
+.cardIMG.notInDeck:hover {
+  transform: scale(3.2) translateX(100px);
+
+}
+
 
 .modal {
   position: fixed;

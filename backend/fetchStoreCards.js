@@ -11,18 +11,16 @@ let dataSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
-    cardName: {
-        type: String,
-    },
-    marketPrice: {
-        type: String,
-    },
-    img: {
-        type: String,
-    },
-    desc: {
-        type: String,
-    }
+    cardName: String,
+    marketPrice: String,
+    img: String,
+    desc: String,
+    color: String,
+    cardType: String,
+    rarity: String,
+    price: Number,
+
+
 })
 
 const Cards = mongoose.model('Cards', dataSchema);
@@ -59,9 +57,22 @@ async function getGroupIDs() {
 
 }
 
+async function getPriceData() {
+    let Map = {}
+    const groupIds = await getGroupIDs()
+    for (const id of groupIds) {
+        const data = await fetchJsonData(`https://tcgcsv.com/tcgplayer/68/${id}/prices`)
+        for (const priceData of data.results) {
+            Map[priceData.productId] = priceData.marketPrice
+        }
+    }
+    return Map
+}
+
 
 async function getCardData() {
     let batch = []
+    const prices = await getPriceData()
     const groupIds = await getGroupIDs()
     let count = 0
     for (const id of groupIds) {
@@ -69,12 +80,34 @@ async function getCardData() {
         for (const cardData of data.results) {
             if (cardData.extendedData.length >= 3 && !cardData.name.includes("Deck") && !cardData.name.includes("Pack") && !cardData.name.includes("Booster")) {
 
+                let color = '';
+                let cardType = '';
+                let rarity = '';
+                let Description = '';
+                let price = '';
 
+
+                for (const extended of cardData.extendedData) {
+                    if (extended.name == "Color") {
+                        color = extended.value;
+                    } else if (extended.name == "CardType") {
+                        cardType = extended.value
+                    } else if (extended.name == "Rarity") {
+                        rarity = extended.value
+                    } else if (extended.name == "Description") {
+                        Description = extended.value
+                    }
+                }
+                price = prices[cardData.productId] || "No Price Data"
                 batch.push({
                     productID: cardData.productId,
                     cardName: cardData.name,
                     img: `https://tcgplayer-cdn.tcgplayer.com/product/${cardData.productId}_in_1000x1000.jpg`,
-                    desc: cardData.extendedData[2].value
+                    desc: Description,
+                    color: color,
+                    cardType: cardType,
+                    rarity: rarity,
+                    price: price,
                 })
 
                 if (batch.length >= BatchSize) {
@@ -95,6 +128,7 @@ async function getCardData() {
 
 async function insertBatch(batch) {
     try {
+
         const result = await Cards.insertMany(batch, { ordered: false });
         console.log("Inserted Batch", result.length)
     } catch (err) {

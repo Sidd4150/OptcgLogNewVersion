@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/cardList.jsx'
+import Home from './pages/cardDisplay.jsx'
 import DeckBuild from './pages/deckList.jsx'
 import About from './pages/about.jsx'
 
