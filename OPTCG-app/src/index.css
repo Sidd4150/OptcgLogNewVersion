@@ -39,27 +39,63 @@ header .nav-links a:hover {
 /*-- DeckList css-- */
 .layout {
   display: flex;
-  gap: 20px;
-  /* space between the two sections */
-  padding: 20px;
-}
-
-.CardDisplay_D {
-  flex: 1.25;
-  /* takes up 1 part */
-  background-color: #f0f0f0;
-  padding: 20px;
-  min-height: 100vh;
+  background-color: #5f7c82;
 }
 
 .DeckSection {
   flex: 2;
-  /* takes up 2 parts, so it's bigger */
-  background-color: #e0e0e0;
-  padding: 20px;
+
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0%;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0px;
+
+  height: fit-content;
+  /* Optional: explicitly controls spacing */
+  line-height: 0;
+}
+
+.deck-card {
+  width: 120px;
+  height: 150px;
+  /* Force equal height for all cards */
+  margin: 0.5%;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
+.deck-card-img {
+  width: 200px;
+  height: 150px;
+  margin: 0;
+  padding: 0;
+  display: block;
+  object-fit: contain;
+}
+
+.CardDisplay_D {
+  flex: 1.25;
+  background-color: #f0f0f0;
+
+}
+
+.deck-controls {
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+
+
+
+
+/*--Styling for About */
 .AboutDesc {
   padding-left: 10px;
   padding-top: 10px;
@@ -130,7 +166,7 @@ header .nav-links a:hover {
   border-radius: 50px;
 }
 
-/*--Styling for Search */
+/*--Styling for Card Area */
 .card_area {
   background-image: url("./assets/waves.png");
   background-size: 300px 200px;
@@ -198,10 +234,7 @@ ul {
 
 }
 
-.cardIMG.notInDeck:hover {
-  transform: scale(3.2) translateX(100px);
 
-}
 
 
 .modal {

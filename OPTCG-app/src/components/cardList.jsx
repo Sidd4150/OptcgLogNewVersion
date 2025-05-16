@@ -4,7 +4,7 @@ import Search from './search.jsx'
 import { useState, useEffect } from 'react'
 import '../index.css'
 
-function cardList({ notInDeck }) {
+function cardList({ notInDeck, setDeckCards, DeckCards }) {
 
     const [cards, setCards] = useState([])
     const [displayCards, setDisplayCards] = useState([])
@@ -46,6 +46,14 @@ function cardList({ notInDeck }) {
         if (notInDeck) {
             setSelectedImage(cardbig.img);
             setBigCardObj(cardbig)
+        } else {
+            if (DeckCards.filter(c => c.cardName === cardbig.cardName).length < 4) {
+                setDeckCards(DeckCards => [...DeckCards, cardbig])
+            } else {
+                alert("can only have 4 of the same card in a deck")
+            }
+
+
         }
 
     };
@@ -99,7 +107,7 @@ function cardList({ notInDeck }) {
                             <br></br>
                             <p>{bigCardObj.color}</p>
                             <hr></hr>
-                            <p>"The market price: ${bigCardObj.price}</p>
+                            <p>The market price: ${bigCardObj.price}</p>
                         </div>
                     </div>
                 )}
