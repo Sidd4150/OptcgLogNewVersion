@@ -3,10 +3,15 @@ const express = require("express");//Load express module
 const cors = require('cors');
 const path = require('path');
 const { getAllCards } = require(__dirname + '/dataBaseInteractions.js');
+const { getDecks, saveDeck } = require(__dirname + '/fetchStoreDecks.js');
 const app = express();
+
 
 app.use(express.static(path.join(__dirname, '../OPTCG-app/dist')));
 app.use(cors());
+
+app.use(express.json());
+
 app.get('/getCards', async function (req, res) {
     const cardData = await getAllCards()
 
@@ -18,6 +23,17 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../OPTCG-app/dist', 'index.html'));
 });
 
+app.get('/getDecks', async (req, res) => {
+    const decks = await getDecks();
+    res.json(decks);
+});
+
+app.post('/saveDeck', async (req, res) => {
+    const deckData = req.body;
+
+    const savedDeck = await saveDeck(deckData);
+    res.status(201).json(savedDeck);
+});
 
 
 

@@ -12,6 +12,7 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
     const [postPerPage, setPostPerPage] = useState(30)
     const [selectedImage, setSelectedImage] = useState(null);
     const [bigCardObj, setBigCardObj] = useState(null)
+    const [hoveredCard, setHoveredCard] = useState(null);
 
 
     useEffect(() => {
@@ -83,7 +84,11 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
 
                 <ul>
                     {currentCards.map((displayCards, index) => (
-                        <div className="cards" key={index} >
+                        <div className="cards"
+                            key={index}
+                            onMouseEnter={() => setHoveredCard(displayCards)}
+                            onMouseLeave={() => setHoveredCard(null)}
+                        >
 
                             <img className={`cardIMG ${!notInDeck ? 'notInDeck' : ''}`}
                                 src={displayCards.img}
@@ -107,8 +112,13 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
                             <br></br>
                             <p>{bigCardObj.color}</p>
                             <hr></hr>
-                            <p>The market price: ${bigCardObj.price}</p>
+                            <p>The market price: ${bigCardObj.price.toFixed(2)}</p>
                         </div>
+                    </div>
+                )}
+                {!notInDeck && hoveredCard && (
+                    <div className='hoverCard'>
+                        <img src={hoveredCard.img} alt={hoveredCard.cardName} />
                     </div>
                 )}
             </div>
