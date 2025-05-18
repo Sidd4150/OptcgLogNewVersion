@@ -7,16 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "backend/server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Sidd4150/OptcgLogNewVersion.git"
-  },
   "author": "Sid",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Sidd4150/OptcgLogNewVersion/issues"
-  },
-  "homepage": "https://github.com/Sidd4150/OptcgLogNewVersion#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",

@@ -1,15 +1,17 @@
 # One Piece Card Game Application
+## Siddhartha Shakya 20700187
+## Overview/Description
 
-## Overview
+This web application is designed to help users manage and explore data for the One Piece Card Game. It provides features for viewing card details and managing decks and also displays prices of the cards. Some problems I faced were getting the deck load to work and also making sure that the zip worked. I used youtube videos and also W2Schools for help .
 
-This web application is designed to help users manage and explore data for the One Piece Card Game. It provides features for viewing card details and managing decks.
+
 
 ## Features
 
 * **Card Display:** View a list of cards with details such as name, description, color, and price.
 * **Modal View:** Click on a card to see an enlarged image and detailed information.
 * **Deck Builder:** Create and save custom decks.
-* **Responsive Design:** The application is designed to adapt to different screen sizes.
+
 
 ## Technologies Used
 
@@ -34,7 +36,7 @@ The project is structured as follows:
 
 ## Configuration
 
-* `modules/config.js`:  This file contains configuration settings for the server, database connection, and other application-wide settings.  Be sure to configure the `database.connectionString` property with your MongoDB connection string.
+
 
 ## Data Fetching
 
