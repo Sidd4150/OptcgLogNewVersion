@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const connectDB = require('/Users/sid/CS386/FINAL/backend/modules/db.js')
+const connectDB = require('./modules/db.js')
 
 
 connectDB(true);
