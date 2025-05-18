@@ -1,13 +1,14 @@
-const host = '127.0.0.1', port = 3000; //Initialize constants for server
+
 const express = require("express");//Load express module
 const cors = require('cors');
 const path = require('path');
 const { getAllCards } = require(__dirname + '/dataBaseInteractions.js');
 const { getDecks, saveDeck } = require(__dirname + '/fetchStoreDecks.js');
+const config = require('../modules/config.js')
 const app = express();
+const host = config.server.host, port = config.server.port;
 
-
-app.use(express.static(path.join(__dirname, '../OPTCG-app/dist')));
+app.use(express.static(path.join(__dirname, '../OPTCG-app-dev/dist')));
 app.use(cors());
 
 app.use(express.json());

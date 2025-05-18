@@ -293,6 +293,8 @@ ul {
 
 
 
+
+/*--Modal Card Area--*/
 .modal {
   position: fixed;
   top: 0;
@@ -307,6 +309,7 @@ ul {
 }
 
 .card_info {
+  display: grid;
   background: rgb(90, 121, 126);
   width: 50%;
   padding: 1rem;
@@ -314,11 +317,53 @@ ul {
   text-align: center;
 }
 
+.bigName {
+  text-align: left;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+
+}
+
+.bigDesc {
+
+  text-align: left;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.bigColor {
+  text-align: left;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+
+}
+
+.bigPrice {
+  text-align: left;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+
+  top: 250px;
+
+  right: 500px;
+
+  font-size: 1.2rem;
+  font-weight: bold;
+
+
+}
+
 .large-image {
 
   width: 200px;
   height: auto;
   border-radius: 10px;
+  align-items: left;
 }
 
 .cardIMG:hover {

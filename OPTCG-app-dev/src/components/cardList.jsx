@@ -107,12 +107,15 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
                                 src={selectedImage}
                                 alt="Enlarged card"
                             />
-                            <h1>{bigCardObj.cardName}</h1>
-                            <p>{bigCardObj.desc}</p>
-                            <br></br>
-                            <p>{bigCardObj.color}</p>
-                            <hr></hr>
-                            <p>The market price: ${bigCardObj.price.toFixed(2)}</p>
+
+                            <h1 className='bigName'>{bigCardObj.cardName}</h1>
+                            <p className='bigDesc'>{bigCardObj.desc}
+                                {bigCardObj.color}
+                            </p>
+
+
+
+                            <p className='bigPrice'>The market price: ${bigCardObj.price.toFixed(2)}</p>
                         </div>
                     </div>
                 )}
