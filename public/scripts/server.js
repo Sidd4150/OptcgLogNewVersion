@@ -26,6 +26,6 @@ app.get('*', (req, res) => {
 
 
 // Start server
-app.listen(port, host, () => {
+app.listen(port, () => {
     console.log(`Express started on http://localhost:3000/ , ${host}:${port} at ${new Date().toLocaleString()}`);
 });
