@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(express.static(path.join(__dirname, '../../OPTCG-app-dev/dist')));
+app.use(express.static(path.join(__dirname, 'OPTCG-app-dev')));
 
 // Routes
 app.use('/', apiRoutes);
@@ -20,7 +20,7 @@ app.use('/', apiRoutes);
 
 //serve for unknow routes since im using reactRouter
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../OPTCG-app-dev/dist', 'index.html'));
+    res.sendFile(path.join(__dirname, 'OPTCG-app-dev', 'dist', 'index.html'));
 });
 
 
