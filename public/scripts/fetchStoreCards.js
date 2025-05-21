@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-const connectDB = require('./modules/db.js')
+const connectDB = require('../../modules/db.js')
 
 //database connection
 const BatchSize = 100;
 
 
 connectDB(true)
+//schema for cards
 let dataSchema = new mongoose.Schema({
     productID: {
         type: String,
@@ -25,7 +26,7 @@ let dataSchema = new mongoose.Schema({
 
 const Cards = mongoose.model('Cards', dataSchema);
 
-
+//Get the data from the url 
 async function fetchJsonData(url) {
     try {
         const response = await fetch(url);
@@ -40,12 +41,12 @@ async function fetchJsonData(url) {
 
     } catch (error) {
         console.error('Error fetching JSON:', error);
-        return null; // Or throw the error, depending on your error handling strategy
+        return null;
     }
 }
 
 
-
+//Get the group Ids from tcgcsv website
 async function getGroupIDs() {
     const data = await fetchJsonData(`https://tcgcsv.com/tcgplayer/68/groups`)
     const groupIds = []
@@ -56,7 +57,7 @@ async function getGroupIDs() {
     return groupIds
 
 }
-
+//get price data from the tcgcsv website and also map the prices by the product ID to match to cards
 async function getPriceData() {
     let Map = {}
     const groupIds = await getGroupIDs()
@@ -69,7 +70,7 @@ async function getPriceData() {
     return Map
 }
 
-
+//Get the cards by their ids 
 async function getCardData() {
     let batch = []
     const prices = await getPriceData()
@@ -99,6 +100,7 @@ async function getCardData() {
                     }
                 }
                 price = prices[cardData.productId] || "No Price Data"
+                //create batchs to make it faster
                 batch.push({
                     productID: cardData.productId,
                     cardName: cardData.name,
@@ -125,7 +127,7 @@ async function getCardData() {
     console.log(count)
 
 }
-
+//batch insert
 async function insertBatch(batch) {
     try {
 

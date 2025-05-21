@@ -7,7 +7,7 @@ export default function Search({ cards, setDisplayCards, displayCards, currPage 
     const [query, setQuery] = useState("")
 
 
-
+    //Handles when you press submit after entering a search in the search bar
     const handleSubmit = (e) => {
         e.preventDefault();
         if (query === "") {
@@ -25,8 +25,8 @@ export default function Search({ cards, setDisplayCards, displayCards, currPage 
         setQuery("")
 
     }
-
-    const handleFilter = (e) => {
+    //handles the filter changes to filter the cards based on your choice
+    const handleFilter = async (e) => {
         const selectedFilter = e.target.value;
 
         let filteredCards = [...displayCards];
@@ -34,12 +34,21 @@ export default function Search({ cards, setDisplayCards, displayCards, currPage 
         if (selectedFilter === "Desc") {
 
             filteredCards.sort((a, b) => b.price - a.price);
+            setDisplayCards(filteredCards);
         } else if (selectedFilter === "Price Ascending") {
 
             filteredCards.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+            setDisplayCards(filteredCards);
+        } else if (selectedFilter === "leaders") {
+
+            fetch(`http://127.0.0.1:3000/getLeaders`)
+                .then(response => response.json())  // Parse JSON response
+                .then(data => {
+
+                    setDisplayCards(data)
+                })
         }
 
-        setDisplayCards(filteredCards);
         e.target.value = ""
 
     }
@@ -64,6 +73,7 @@ export default function Search({ cards, setDisplayCards, displayCards, currPage 
                     <option value="">filter...</option>
                     <option value="Desc">Price Descending</option>
                     <option>Price Ascending</option>
+                    <option value="leaders">Leaders</option>
                 </select>
 
             </form>

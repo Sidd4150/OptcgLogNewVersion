@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import '../index.css'
 
 function cardList({ notInDeck, setDeckCards, DeckCards }) {
-
+    // all the useState hooks 
     const [cards, setCards] = useState([])
     const [displayCards, setDisplayCards] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -14,7 +14,7 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
     const [bigCardObj, setBigCardObj] = useState(null)
     const [hoveredCard, setHoveredCard] = useState(null);
 
-
+    //when the application is started it gets all the cards once 
     useEffect(() => {
         fetch(`http://127.0.0.1:3000/getCards`)
             .then(response => response.json())  // Parse JSON response
@@ -28,7 +28,7 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
 
 
 
-
+    //paginatiion constants
     const lastPostIndex = currentPage * postPerPage;
     const firstPostIndex = lastPostIndex - postPerPage;
     const currentCards = displayCards.slice(firstPostIndex, lastPostIndex)
@@ -42,12 +42,15 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
         setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
     };
 
-
+    //handles when an image is clicked 
     const handleImgClick = (cardbig) => {
+        // if the cardList is not in the deck it enlarges the image and gives card info
         if (notInDeck) {
             setSelectedImage(cardbig.img);
             setBigCardObj(cardbig)
         } else {
+            //if not it adds the card clicked and adds it to the deck 
+
             if (DeckCards.filter(c => c.cardName === cardbig.cardName).length < 4) {
                 setDeckCards(DeckCards => [...DeckCards, cardbig])
             } else {
@@ -58,6 +61,8 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
         }
 
     };
+
+    //closes enlarged image 
     const handleCloseImage = () => {
         setSelectedImage(null);
         setBigCardObj(null)

@@ -1,10 +1,11 @@
 
 
 
-
+//footer
 function Footer() {
 
     const date = new Date().toLocaleDateString()
+
     return (
         <>
             <footer>

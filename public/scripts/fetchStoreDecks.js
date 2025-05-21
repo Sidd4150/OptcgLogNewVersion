@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const connectDB = require('./modules/db.js')
+const connectDB = require('../../modules/db.js')
 
 
 

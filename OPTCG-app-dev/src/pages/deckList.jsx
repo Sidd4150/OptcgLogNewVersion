@@ -4,14 +4,17 @@ import CardList from '../components/cardList.jsx'
 import '../index.css'
 import { useState, useEffect } from 'react'
 
-
+//deck list with deck builder
 function deckList() {
+
+    //hooks
     const [deckCards, setDeckCards] = useState([])
     const [countOfCards, setCountOfCards] = useState({})
     const [uniqueCards, setUniqueCards] = useState([])
     const [fetchedDecks, setFetchedDecks] = useState([]);
 
-
+    //when deck cards is changed it runs this which creates a map of the deck cards so I can add a count
+    //to the cards so the deck doesnt have duplicated cards
     useEffect(() => {
 
         const countMap = {};
@@ -64,12 +67,14 @@ function deckList() {
             })
         })
     }
-
+    //get deck which will get the deck from the mongoDB
     const handleGetDeck = () => {
         fetch('http://127.0.0.1:3000/getDecks')
             .then(res => res.json())
             .then(data => setFetchedDecks(data))
     }
+
+    //Gets all cards to rebuild the deck after a get deck
     const fetchAllCards = async () => {
         try {
             const response = await fetch('http://127.0.0.1:3000/getCards');
@@ -80,9 +85,9 @@ function deckList() {
             return [];
         }
     };
-
+    //load deck uses all the cards and matches with the ids from mongodb to recreate saved decks
     const loadDeck = async (deck) => {
-        const allCardData = await fetchAllCards(); // You must implement this
+        const allCardData = await fetchAllCards();
         const cards = [];
 
         deck.cards.forEach(({ productID, quantity }) => {

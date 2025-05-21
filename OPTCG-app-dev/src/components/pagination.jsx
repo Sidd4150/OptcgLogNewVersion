@@ -5,7 +5,7 @@ function Pagination({ currentPage, totalPages, goToNextPage, goToPreviousPage })
 
 
 
-
+    //pagination jsx
     return (
         <div className="pagination">
             <button className="paginationBtn" onClick={goToPreviousPage} disabled={currentPage === 1}>

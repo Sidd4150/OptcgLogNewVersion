@@ -2,10 +2,10 @@
   "name": "onepicelog",
   "version": "1.0.0",
   "description": "Site where you can browse and build decks for the one piece card game",
-  "main": "/backend/server.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "backend/server.js"
+    "start": "node ./public/scripts/server.js"
   },
   "author": "Sid",
   "license": "ISC",

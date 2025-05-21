@@ -1,0 +1,5 @@
+
+To run this application you first need to run "npm install".
+Once that is done you run the commande "npm start" or you can go to the directory /public/scripts and run node server.js . This should start the server
+on your local host, navigate to your local host displayed in the console and explore the site!
+The MongoDB connection is mine and is open to all Ips. Also to some good search terms are "luffy" and "kata".

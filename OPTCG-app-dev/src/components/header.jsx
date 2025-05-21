@@ -1,6 +1,7 @@
 import logo from '../assets/newLogo.png';
 import { Link } from 'react-router-dom';
 
+//header with routes 
 function Header() {
     return (
         <header>
