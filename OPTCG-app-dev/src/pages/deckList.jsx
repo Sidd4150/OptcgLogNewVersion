@@ -56,7 +56,7 @@ function deckList() {
             cards: cardsToSave
         });
 
-        fetch('http://127.0.0.1:3000/saveDeck', {
+        fetch('https://optcglognewversion.onrender.com/saveDeck', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ function deckList() {
     }
     //get deck which will get the deck from the mongoDB
     const handleGetDeck = () => {
-        fetch('http://127.0.0.1:3000/getDecks')
+        fetch('https://optcglognewversion.onrender.com/getDecks')
             .then(res => res.json())
             .then(data => setFetchedDecks(data))
     }
@@ -77,7 +77,7 @@ function deckList() {
     //Gets all cards to rebuild the deck after a get deck
     const fetchAllCards = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:3000/getCards');
+            const response = await fetch('https://optcglognewversion.onrender.com/getCards');
             const data = await response.json();
             return data; // This is your full card list
         } catch (error) {

@@ -16,7 +16,7 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
 
     //when the application is started it gets all the cards once 
     useEffect(() => {
-        fetch(`http://127.0.0.1:3000/getCards`)
+        fetch(`https://optcglognewversion.onrender.com/getCards`)
             .then(response => response.json())  // Parse JSON response
             .then(data => {
                 setCards(data)

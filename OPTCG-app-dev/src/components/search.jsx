@@ -41,7 +41,7 @@ export default function Search({ cards, setDisplayCards, displayCards, currPage 
             setDisplayCards(filteredCards);
         } else if (selectedFilter === "leaders") {
 
-            fetch(`http://127.0.0.1:3000/getLeaders`)
+            fetch(`https://optcglognewversion.onrender.com/getLeaders`)
                 .then(response => response.json())  // Parse JSON response
                 .then(data => {
 
