@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000
 const pathToRoot = path.join(__dirname, '../../');
 // Middleware
 app.use(cors());
-
+app.use(express.json());
 app.use(express.static(path.join(pathToRoot, 'OPTCG-app-dev', 'dist')));
 
 // Routes

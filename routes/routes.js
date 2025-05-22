@@ -3,7 +3,7 @@ const router = express.Router();
 const path = require('path');
 const { getAllCards } = require('../public/scripts/dataBaseInteractions');
 const { getDecks, saveDeck } = require('../public/scripts/fetchStoreDecks');
-app.use(express.json());
+
 // Get all cards
 router.get('/getCards', async (req, res) => {
     const cardData = await getAllCards();
