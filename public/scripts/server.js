@@ -7,11 +7,11 @@ const apiRoutes = require('../../routes/routes.js');
 const app = express();
 const host = config.server.host;
 const port = process.env.PORT || 3000
-
+const pathToRoot = path.join(__dirname, '../../');
 // Middleware
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, 'OPTCG-app-dev', 'dist')));
+app.use(express.static(path.join(pathToRoot, 'OPTCG-app-dev', 'dist')));
 
 // Routes
 app.use('/', apiRoutes);
@@ -19,7 +19,7 @@ app.use('/', apiRoutes);
 
 //serve for unknow routes since im using reactRouter
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'OPTCG-app-dev', 'dist', 'index.html'));
+    res.sendFile(path.join(pathToRoot, 'OPTCG-app-dev', 'dist', 'index.html'));
 });
 
 
