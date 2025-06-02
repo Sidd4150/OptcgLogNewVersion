@@ -1,18 +1,59 @@
+🃏 Deck Builder & Card Search App
 
-## Siddhartha Shakya 20700187
-Description
+A web application that allows users to search for trading cards, view card prices, and build/save custom decks. Inspired by other similar tools but redesigned with simplicity and clarity in mind.
 
-This is a site where you can search for cards and also build decks to build the perfect deck. I've used similar sites to this but found their sites confusing
-so I tried to create a simple site that is fun to look at that accopblish the goal of searching cards and building decks.
-In this project you can search for cards and see the prices. So if you wanted to check for the price of a card because you wanted to buy it you can.
-Or if you just want to see what the most expensive card is you can. The deck builder allows you to build your decks and save them. So if you are thinking
-of creating a new deck and want to see how much it cost this is the place.
-Some problems I faced were getting the deck load to work , also the leader filter wasnt working because
-I was using a post but when sending all the cards throught the post it was too large 
-so I changed it to get the cards in the /getLeaders and filter it there and send it back.
-and also making sure that the zip worked. 
-I used youtube videos for pagination and react hook help and also W2Schools for help.
+🔍 Features
+
+🔎 Card Search: Look up cards by name and view their current prices.
+
+💸 Price Checker: Compare prices for cards — whether you're buying, trading, or just curious about the most expensive ones.
+
+🧠 Deck Builder: Create and save custom decks for future reference or cost estimation.
+
+🗃️ Saved Decks: Easily return to your saved builds to refine or test new ideas.
+
+👑 Leader Filtering: Filter cards by specific leaders to tailor your deck.
+
+💠 Tech Stack
+
+Frontend: React (Vite), React Hooks, Axios
+
+Backend: Express.js (Node.js)
+
+Database: MongoDB (via Mongoose)
+
+Deployment: Render
+
+Utilities:
+
+Pagination
 
 
+🧹 Key Challenges & Solutions
+
+Leader Filtering Issue: Originally implemented as a POST request, but payload size was too large. Refactored to use a GET request at /getLeaders, apply filtering server-side, and return filtered results.
 
 
+🧪 Learning Resources
+
+React Pagination & Hooks: YouTube tutorials
+
+General Web Dev Help: W3Schools
+
+🚀 Getting Started
+
+1. Clone the Repository
+
+git clone
+cd OptcgLogNewversion
+
+2. Setup
+npm install
+cd Optcg folder
+npm rub build
+npm start
+
+
+4. Open in Browser
+
+Go to http://localhost:5173 (or whatever Vite provides) to use the app.
