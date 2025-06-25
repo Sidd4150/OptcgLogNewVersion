@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 //Copy connection string into variable connString, replace <password> with your actual password
 //Make sure to also remove the angle brackets (<...>)
-//Michael's connection string as a sample, yours will look different
 const connString = 'mongodb+srv://Sidushakya:SiddFullStack-@fullstackwebdev.xjlmih6.mongodb.net/?retryWrites=true&w=majority&appName=fullstackwebdev';
 mongoose.connect(connString)
 	.then( //Callback functions
