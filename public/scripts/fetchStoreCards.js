@@ -24,7 +24,7 @@ let dataSchema = new mongoose.Schema({
 
 })
 
-const Cards = mongoose.model('Cards', dataSchema);
+const Cards = mongoose.models.Cards || mongoose.model('Cards', dataSchema);
 
 //Get the data from the url 
 async function fetchJsonData(url) {
