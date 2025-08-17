@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const { getAllCards } = require('../public/scripts/dataBaseInteractions');
 const { getDecks, saveDeck } = require('../public/scripts/fetchStoreDecks');
+const { getCardData } = require('../public/scripts/fetchStoreCards');
 
 // Get all cards
 router.get('/getCards', async (req, res) => {
@@ -28,6 +29,15 @@ router.post('/saveDeck', async (req, res) => {
     const deckData = req.body;
     const savedDeck = await saveDeck(deckData);
     res.status(201).json(savedDeck);
+});
+
+router.get("/update-cards", async (req, res) => {
+    try {
+        const count = await getCardData();
+        res.json({ success: true, message: `Updated ${count} cards` });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
 });
 
 module.exports = router;

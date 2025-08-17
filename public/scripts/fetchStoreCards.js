@@ -149,7 +149,7 @@ getCardData().then(() => {
     mongoose.disconnect();
 })
 
-
+module.exports = { getCardData };
 
 
 
