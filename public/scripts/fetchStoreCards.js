@@ -132,8 +132,20 @@ async function insertBatch(batch) {
     try {
         const bulkOps = batch.map(card => ({
             updateOne: {
-                filter: { productID: card.productID },
-                update: { $set: card },
+                filter: { productID: String(card.productID) },
+                update: {
+                    $set: {
+
+                        cardName: card.cardName,
+                        img: card.img,
+                        desc: card.desc,
+                        color: card.color,
+                        cardType: card.cardType,
+                        rarity: card.rarity,
+                        price: Number(card.price || 0) // always number
+
+                    }
+                },
                 upsert: true, // insert if not exists, update if exists
             },
         }));
