@@ -130,24 +130,23 @@ async function getCardData() {
 //batch insert
 async function insertBatch(batch) {
     try {
+        const bulkOps = batch.map(card => ({
+            updateOne: {
+                filter: { productID: card.productID },
+                update: { $set: card },
+                upsert: true, // insert if not exists, update if exists
+            },
+        }));
 
-        const result = await Cards.insertMany(batch, { ordered: false });
-        console.log("Inserted Batch", result.length)
+        const result = await Cards.bulkWrite(bulkOps, { ordered: false });
+        console.log(
+            `Inserted: ${result.upsertedCount}, Updated: ${result.modifiedCount}`
+        );
     } catch (err) {
-        if (err.writeErrors) {
-            console.warn(`Some duplicates skipped in batch.`);
-
-        } else {
-            console.error(err);
-
-        }
+        console.error("Batch insert/update error:", err);
     }
 }
 
-getCardData().then(() => {
-    console.log(" Done fetching and inserting cards.");
-    mongoose.disconnect();
-})
 
 module.exports = { getCardData };
 
