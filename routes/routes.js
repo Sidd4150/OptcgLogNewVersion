@@ -17,6 +17,12 @@ router.get('/getLeaders', async (req, res) => {
     const leaderCards = cards.filter(card => card.cardType === 'Leader');
     res.json(leaderCards);
 });
+// TODO: Add a parameter to send a color ex:Red, Blue, etc. To the header. use on the filter and return selected colored cards 
+router.get('/getByColor', async (req, res) => {
+    const cards = await getAllCards();
+    const leaderCards = cards.filter(card => card.cardType === 'REPLACE WITH COLOR INPUT');
+    res.json(leaderCards);
+});
 
 // Get saved decks
 router.get('/getDecks', async (req, res) => {
