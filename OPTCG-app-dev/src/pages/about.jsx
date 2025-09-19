@@ -10,11 +10,10 @@ function About() {
         <>
             <Header />
             <h1>About</h1>
-            <p className='AboutDesc'>This is a site where you can search for cards and also build decks to build the perfect deck. I've used similar sites to this but found their sites confusing
-                so I tried to create a simple site that is fun to look at that accopblish the goal of searching cards and building decks.
-                In this project you can search for cards and see the prices. So if you wanted to check for the price of a card because you wanted to buy it you can.
-                Or if you just want to see what the most expensive card is you can. The deck builder allows you to build your decks and save them. So if you are thinking
-                of creating a new deck and want to see how much it cost this is the place.
+            <p className='AboutDesc'> I created this site because I wanted to make a simple card list displayer
+                for the one piece TCG that also kept track of the prices of the cards using data from TCGplayer. As of now
+                you can search for cards and see the prices. The deck builder is a work in progress and will soon require an
+                account to use , so you can save and update decks you create.
             </p>
             <Footer />
         </>
