@@ -39,11 +39,13 @@ router.post('/saveDeck', async (req, res) => {
 //updates cards 
 router.get("/update-cards", async (req, res) => {
     try {
+        console.log("Getting card data")
         const count = await getCardData();
         res.json({ success: true, message: `Updated ${count} cards` });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
 });
+
 
 module.exports = router;

@@ -1,167 +1,136 @@
 const mongoose = require('mongoose');
 const connectDB = require('../../modules/db.js')
 
-//database connection
+// database connection (WAIT for it)
+connectDB(true)
+
 const BatchSize = 100;
 
-
-connectDB(true)
-//schema for cards
+// schema
 let dataSchema = new mongoose.Schema({
-    productID: {
-        type: String,
-        unique: true
-    },
+    productID: { type: String, unique: true },
     cardName: String,
-    marketPrice: String,
     img: String,
     desc: String,
     color: String,
     cardType: String,
     rarity: String,
     price: Number,
-
-
 })
 
 const Cards = mongoose.models.Cards || mongoose.model('Cards', dataSchema);
 
-//Get the data from the url 
+// fetch JSON
 async function fetchJsonData(url) {
     try {
         const response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const jsonData = await response.json();
-
-        return jsonData; // Return the parsed JSON data
-
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return await response.json();
     } catch (error) {
         console.error('Error fetching JSON:', error);
         return null;
     }
 }
 
-
-//Get the group Ids from tcgcsv website
+// get group IDs
 async function getGroupIDs() {
-    const data = await fetchJsonData(`https://tcgcsv.com/tcgplayer/68/groups`)
-    const groupIds = []
-    for (i = 0; i < data.results.length; i++) {
-        groupIds.push(data.results[i].groupId)
-    }
-    console.log("Finished getting Ids")
-    return groupIds
-
+    const data = await fetchJsonData(`https://tcgcsv.com/tcgplayer/68/groups`);
+    if (!data?.results) return [];
+    return data.results.map(x => x.groupId);
 }
-//get price data from the tcgcsv website and also map the prices by the product ID to match to cards
+
+// get prices
 async function getPriceData() {
-    let Map = {}
-    const groupIds = await getGroupIDs()
+    const groupIds = await getGroupIDs();
+    let priceMap = {};
+
     for (const id of groupIds) {
-        const data = await fetchJsonData(`https://tcgcsv.com/tcgplayer/68/${id}/prices`)
-        for (const priceData of data.results) {
-            Map[priceData.productId] = priceData.marketPrice
+        const data = await fetchJsonData(`https://tcgcsv.com/tcgplayer/68/${id}/prices`);
+        if (!data?.results) continue;
+
+        for (const p of data.results) {
+            priceMap[p.productId] = p.marketPrice;
         }
     }
-    return Map
+    return priceMap;
 }
 
-//Get the cards by their ids 
+// MAIN FUNCTION ✅ FIXED
 async function getCardData() {
-    let batch = []
-    const prices = await getPriceData()
-    const groupIds = await getGroupIDs()
-    let count = 0
-    for (const id of groupIds) {
-        const data = await fetchJsonData(`https://tcgcsv.com/tcgplayer/68/${id}/products`)
+    console.log("Starting card update...");
+
+    const groupIds = await getGroupIDs();
+    const prices = await getPriceData();
+
+    let batch = [];
+    let count = 0;
+
+    for (let id of groupIds) {
+        const data = await fetchJsonData(`https://tcgcsv.com/tcgplayer/68/${id}/products`);
+        if (!data?.results) continue;
+
         for (const cardData of data.results) {
-            if (cardData.extendedData.length >= 3 && !cardData.name.includes("Deck") && !cardData.name.includes("Pack") && !cardData.name.includes("Booster")) {
+            if (
+                cardData.extendedData.length >= 3 &&
+                !cardData.name.includes("Deck") &&
+                !cardData.name.includes("Pack") &&
+                !cardData.name.includes("Booster")
+            ) {
+                let color = '', cardType = '', rarity = '', desc = '';
 
-                let color = '';
-                let cardType = '';
-                let rarity = '';
-                let Description = '';
-                let price = '';
-
-
-                for (const extended of cardData.extendedData) {
-                    if (extended.name == "Color") {
-                        color = extended.value;
-                    } else if (extended.name == "CardType") {
-                        cardType = extended.value
-                    } else if (extended.name == "Rarity") {
-                        rarity = extended.value
-                    } else if (extended.name == "Description") {
-                        Description = extended.value
-                    }
+                for (const ext of cardData.extendedData) {
+                    if (ext.name === "Color") color = ext.value;
+                    if (ext.name === "CardType") cardType = ext.value;
+                    if (ext.name === "Rarity") rarity = ext.value;
+                    if (ext.name === "Description") desc = ext.value;
                 }
-                price = prices[cardData.productId] || "No Price Data"
-                //create batchs to make it faster
+
                 batch.push({
-                    productID: cardData.productId,
+                    productID: String(cardData.productId),
                     cardName: cardData.name,
                     img: `https://tcgplayer-cdn.tcgplayer.com/product/${cardData.productId}_in_1000x1000.jpg`,
-                    desc: Description,
-                    color: color,
-                    cardType: cardType,
-                    rarity: rarity,
-                    price: price,
-                })
+                    desc,
+                    color,
+                    cardType,
+                    rarity,
+                    price: Number(prices[cardData.productId] || 0),
+                });
 
                 if (batch.length >= BatchSize) {
-                    await insertBatch(batch)
-                    batch = []
+                    await insertBatch(batch);
+                    batch = [];
                 }
 
-                count += 1
+                count++;
             }
-
-
         }
     }
 
-    console.log(count)
+    // ✅ FIX: Insert leftover batch
+    if (batch.length > 0) {
+        await insertBatch(batch);
+    }
 
+    console.log(`✅ Done. Total cards processed: ${count}`);
+    return count;
 }
-//batch insert
+
+// batch insert
 async function insertBatch(batch) {
     try {
         const bulkOps = batch.map(card => ({
             updateOne: {
-                filter: { productID: String(card.productID) },
-                update: {
-                    $set: {
-
-                        cardName: card.cardName,
-                        img: card.img,
-                        desc: card.desc,
-                        color: card.color,
-                        cardType: card.cardType,
-                        rarity: card.rarity,
-                        price: Number(card.price || 0) // always number
-
-                    }
-                },
-                upsert: true, // insert if not exists, update if exists
+                filter: { productID: card.productID },
+                update: { $set: card },
+                upsert: true,
             },
         }));
 
         const result = await Cards.bulkWrite(bulkOps, { ordered: false });
-        console.log(
-            `Inserted: ${result.upsertedCount}, Updated: ${result.modifiedCount}`
-        );
+        console.log(`Inserted: ${result.upsertedCount}, Updated: ${result.modifiedCount}`);
     } catch (err) {
         console.error("Batch insert/update error:", err);
     }
 }
 
-
 module.exports = { getCardData };
-
-
-
-
