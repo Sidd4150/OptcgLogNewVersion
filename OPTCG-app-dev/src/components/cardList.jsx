@@ -4,6 +4,8 @@ import Search from './search.jsx'
 import { useState, useEffect } from 'react'
 import '../index.css'
 
+const apiUrl = import.meta.env.API_URL;
+
 function cardList({ notInDeck, setDeckCards, DeckCards }) {
     // all the useState hooks 
     const [cards, setCards] = useState([])
@@ -16,7 +18,7 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
 
     //when the application is started it gets all the cards once 
     useEffect(() => {
-        fetch(`https://optcglognewversion.onrender.com/getCards`)
+        fetch(`${apiUrl}/getCards`)  // Fetch data from the API endpoint
             .then(response => response.json())  // Parse JSON response
             .then(data => {
                 setCards(data)

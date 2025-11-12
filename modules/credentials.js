@@ -1,4 +1,4 @@
-require('dotenv').config();  // Load environment variables from .env
+require('dotenv').config({ path: __dirname + '/../.env' }) // Load environment variables from .env
 
 const un = process.env.MONGO_USER;
 const pw = process.env.MONGO_PASS;

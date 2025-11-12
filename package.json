@@ -4,7 +4,8 @@
   "description": "Site where you can browse and build decks for the one piece card game",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test:db ",
+    "test:db": "node tests/test_connection.js",
     "start": "node ./public/scripts/server.js"
   },
   "author": "Sid",

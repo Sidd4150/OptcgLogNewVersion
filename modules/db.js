@@ -3,6 +3,7 @@ const mongoose = require('mongoose');//Load mongoose into constant mongoose
 
 const connectDB = function (blnOpen, cb) {
 	if (blnOpen) { //If true, open database connection
+		console.log(`Connecting to database on ${new Date().toLocaleString()}...`);
 		mongoose.connect(connString)
 			.then( //Callback functions
 				function () { //Success

@@ -2,7 +2,7 @@
 import '../index.css'
 import { useState, useEffect } from 'react'
 
-
+const apiUrl = import.meta.env.API_URL;
 export default function Search({ cards, setDisplayCards, displayCards, currPage }) {
     const [query, setQuery] = useState("")
 
@@ -41,7 +41,7 @@ export default function Search({ cards, setDisplayCards, displayCards, currPage 
             setDisplayCards(filteredCards);
         } else if (selectedFilter === "leaders") {
 
-            fetch(`https://optcglognewversion.onrender.com/getLeaders`)
+            fetch(`${apiUrl}/getLeaders`)
                 .then(response => response.json())  // Parse JSON response
                 .then(data => {
 

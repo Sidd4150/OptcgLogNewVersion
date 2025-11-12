@@ -55,7 +55,7 @@ async function getPriceData() {
     return priceMap;
 }
 
-// MAIN FUNCTION ✅ FIXED
+// MAIN FUNCTION FIXED
 async function getCardData() {
     console.log("Starting card update...");
 
@@ -106,7 +106,7 @@ async function getCardData() {
         }
     }
 
-    // ✅ FIX: Insert leftover batch
+    //  FIX: Insert leftover batch
     if (batch.length > 0) {
         await insertBatch(batch);
     }
