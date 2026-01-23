@@ -131,6 +131,15 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
                         <img src={hoveredCard.img} alt={hoveredCard.cardName} />
                     </div>
                 )}
+
+                <div className="PagnationDiv" >
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        goToNextPage={goToNextPage}
+                        goToPreviousPage={goToPreviousPage}
+                    />
+                </div>
             </div>
 
 
