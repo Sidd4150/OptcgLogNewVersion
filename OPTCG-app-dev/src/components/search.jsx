@@ -2,7 +2,7 @@
 import '../index.css'
 import { useState, useEffect } from 'react'
 
-const apiUrl = import.meta.env.API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 export default function Search({ cards, setDisplayCards, displayCards, currPage }) {
     const [query, setQuery] = useState("")
 
@@ -29,19 +29,17 @@ export default function Search({ cards, setDisplayCards, displayCards, currPage 
     const handleFilter = async (e) => {
         const selectedFilter = e.target.value;
 
-        let filteredCards = [...displayCards];
+        let filteredCards = [...cards];
 
         if (selectedFilter === "Desc") {
-
             filteredCards.sort((a, b) => b.price - a.price);
             setDisplayCards(filteredCards);
         } else if (selectedFilter === "Price Ascending") {
-
             filteredCards.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
             setDisplayCards(filteredCards);
         } else if (selectedFilter === "leaders") {
 
-            fetch(`https://optcglognewversion-production.up.railway.app/getLeaders`)
+            fetch(`${apiUrl}getLeaders`)
                 .then(response => response.json())  // Parse JSON response
                 .then(data => {
 
@@ -72,7 +70,7 @@ export default function Search({ cards, setDisplayCards, displayCards, currPage 
                 <select className="filter" onChange={handleFilter}>
                     <option value="">filter...</option>
                     <option value="Desc">Price Descending</option>
-                    <option>Price Ascending</option>
+                    <option value="Price Ascending">Price Ascending</option>
                     <option value="leaders">Leaders</option>
                 </select>
 

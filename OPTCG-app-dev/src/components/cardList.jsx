@@ -4,9 +4,9 @@ import Search from './search.jsx'
 import { useState, useEffect } from 'react'
 import '../index.css'
 
-const apiUrl = import.meta.env.API_URL;
+const apiURL = import.meta.env.VITE_API_URL;
 
-function cardList({ notInDeck, setDeckCards, DeckCards }) {
+function CardList({ notInDeck, setDeckCards, DeckCards }) {
     // all the useState hooks 
     const [cards, setCards] = useState([])
     const [displayCards, setDisplayCards] = useState([])
@@ -15,17 +15,25 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
     const [selectedImage, setSelectedImage] = useState(null);
     const [bigCardObj, setBigCardObj] = useState(null)
     const [hoveredCard, setHoveredCard] = useState(null);
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
 
-    //when the application is started it gets all the cards once 
+    //when the application is started it gets all the cards once
     useEffect(() => {
-        fetch(`https://optcglognewversion-production.up.railway.app/getCards`)  // Fetch data from the API endpoint
-            .then(response => response.json())  // Parse JSON response
+        fetch(`${apiURL}getCards`)
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to fetch cards')
+                return response.json()
+            })
             .then(data => {
                 setCards(data)
                 setDisplayCards(data)
+                setLoading(false)
             })
-
-
+            .catch(err => {
+                setError(err.message)
+                setLoading(false)
+            })
     }, [])
 
 
@@ -73,6 +81,9 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
 
 
 
+    if (loading) return <div className='card-status'>Loading cards...</div>
+    if (error) return <div className='card-status card-status--error'>Error: {error}</div>
+
     return (
         <>
 
@@ -90,20 +101,18 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
                 </div>
 
                 <ul>
-                    {currentCards.map((displayCards, index) => (
-                        <div className="cards"
-                            key={index}
+                    {currentCards.map((displayCards) => (
+                        <li className="cards"
+                            key={displayCards.productID}
                             onMouseEnter={() => setHoveredCard(displayCards)}
                             onMouseLeave={() => setHoveredCard(null)}
                         >
-
                             <img className={`cardIMG ${!notInDeck ? 'notInDeck' : ''}`}
                                 src={displayCards.img}
                                 alt={displayCards.cardName}
                                 onClick={() => { handleImgClick(displayCards) }}
-
                             />
-                        </div>
+                        </li>
                     ))}
                 </ul>
                 {selectedImage && (
@@ -115,14 +124,14 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
                                 alt="Enlarged card"
                             />
 
-                            <h1 className='bigName'>{bigCardObj.cardName}</h1>
-                            <p className='bigDesc'>{bigCardObj.desc}
-                                {bigCardObj.color}
-                            </p>
-
-
-
-                            <p className='bigPrice'>The market price: ${bigCardObj.price.toFixed(2)}</p>
+                            <div className="details-container">
+                                <h1 className='bigName'>{bigCardObj.cardName}</h1>
+                                <div className='bigDesc'>
+                                    <p>{bigCardObj.desc}</p>
+                                    <small>Color: {bigCardObj.color}</small>
+                                </div>
+                                <p className='bigPrice'>${bigCardObj.price.toFixed(2)}</p>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -147,4 +156,4 @@ function cardList({ notInDeck, setDeckCards, DeckCards }) {
     )
 }
 
-export default cardList
+export default CardList
