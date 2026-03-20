@@ -11,12 +11,13 @@ function CardList({ notInDeck, setDeckCards, DeckCards }) {
     const [cards, setCards] = useState([])
     const [displayCards, setDisplayCards] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const [postPerPage, setPostPerPage] = useState(30)
+    const postPerPage = 30
     const [selectedImage, setSelectedImage] = useState(null);
     const [bigCardObj, setBigCardObj] = useState(null)
     const [hoveredCard, setHoveredCard] = useState(null);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [deckLimitCard, setDeckLimitCard] = useState(null)
 
     //when the application is started it gets all the cards once
     useEffect(() => {
@@ -64,7 +65,8 @@ function CardList({ notInDeck, setDeckCards, DeckCards }) {
             if (DeckCards.filter(c => c.cardName === cardbig.cardName).length < 4) {
                 setDeckCards(DeckCards => [...DeckCards, cardbig])
             } else {
-                alert("can only have 4 of the same card in a deck")
+                setDeckLimitCard(cardbig.cardName)
+                setTimeout(() => setDeckLimitCard(null), 3000)
             }
 
 
@@ -135,6 +137,12 @@ function CardList({ notInDeck, setDeckCards, DeckCards }) {
                         </div>
                     </div>
                 )}
+                {deckLimitCard && (
+                    <div className='deck-toast'>
+                        Max 4 copies of "{deckLimitCard}" allowed
+                    </div>
+                )}
+
                 {!notInDeck && hoveredCard && (
                     <div className='hoverCard'>
                         <img src={hoveredCard.img} alt={hoveredCard.cardName} />

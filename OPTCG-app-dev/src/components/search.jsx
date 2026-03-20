@@ -1,6 +1,6 @@
 
 import '../index.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const apiUrl = import.meta.env.VITE_API_URL;
 export default function Search({ cards, setDisplayCards, displayCards, currPage }) {

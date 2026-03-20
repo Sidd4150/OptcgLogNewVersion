@@ -17,6 +17,9 @@ function DeckList() {
     const [showSaveModal, setShowSaveModal] = useState(false)
     const [deckNameInput, setDeckNameInput] = useState('')
     const [saveError, setSaveError] = useState(null)
+    const [isSaving, setIsSaving] = useState(false)
+    const [isLoadingDecks, setIsLoadingDecks] = useState(false)
+    const [isLoadingDeck, setIsLoadingDeck] = useState(false)
 
     //when deck cards is changed it runs this which creates a map of the deck cards so I can add a count
     //to the cards so the deck doesnt have duplicated cards
@@ -41,6 +44,15 @@ function DeckList() {
         setDeckCards([])
     }
 
+    const handleRemoveCard = (productID) => {
+        const index = deckCards.findIndex(c => c.productID === productID)
+        if (index !== -1) {
+            const updated = [...deckCards]
+            updated.splice(index, 1)
+            setDeckCards(updated)
+        }
+    }
+
     const totalCost = deckCards.reduce((sum, card) => sum + (card.price || 0), 0);
 
     const handleSaveDeck = () => {
@@ -52,7 +64,7 @@ function DeckList() {
         setShowSaveModal(true)
     }
 
-    const handleConfirmSave = () => {
+    const handleConfirmSave = async () => {
         if (!deckNameInput.trim()) {
             setSaveError("Please enter a deck name.")
             return;
@@ -63,15 +75,21 @@ function DeckList() {
             quantity: countOfCards[card.productID]
         }));
 
-        fetch(`${apiURL}saveDeck`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: deckNameInput.trim(), cards: cardsToSave })
-        })
-
-        setShowSaveModal(false)
-        setDeckNameInput('')
-        setSaveError(null)
+        setIsSaving(true)
+        try {
+            await fetch(`${apiURL}saveDeck`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: deckNameInput.trim(), cards: cardsToSave })
+            })
+            setShowSaveModal(false)
+            setDeckNameInput('')
+            setSaveError(null)
+        } catch {
+            setSaveError("Failed to save deck. Please try again.")
+        } finally {
+            setIsSaving(false)
+        }
     }
 
     const handleCancelSave = () => {
@@ -80,10 +98,17 @@ function DeckList() {
         setSaveError(null)
     }
     //get deck which will get the deck from the mongoDB
-    const handleGetDeck = () => {
-        fetch(`${apiURL}getDecks`)
-            .then(res => res.json())
-            .then(data => setFetchedDecks(data))
+    const handleGetDeck = async () => {
+        setIsLoadingDecks(true)
+        try {
+            const res = await fetch(`${apiURL}getDecks`)
+            const data = await res.json()
+            setFetchedDecks(data)
+        } catch {
+            setSaveError("Failed to load decks. Please try again.")
+        } finally {
+            setIsLoadingDecks(false)
+        }
     }
 
     //Gets all cards to rebuild the deck after a get deck
@@ -99,19 +124,24 @@ function DeckList() {
     };
     //load deck uses all the cards and matches with the ids from mongodb to recreate saved decks
     const loadDeck = async (deck) => {
-        const allCardData = await fetchAllCards();
-        const cards = [];
+        setIsLoadingDeck(true)
+        try {
+            const allCardData = await fetchAllCards();
+            const cards = [];
 
-        deck.cards.forEach(({ productID, quantity }) => {
-            const cardInfo = allCardData.find(card => card.productID === productID);
-            if (cardInfo) {
-                for (let i = 0; i < quantity; i++) {
-                    cards.push({ ...cardInfo });
+            deck.cards.forEach(({ productID, quantity }) => {
+                const cardInfo = allCardData.find(card => card.productID === productID);
+                if (cardInfo) {
+                    for (let i = 0; i < quantity; i++) {
+                        cards.push({ ...cardInfo });
+                    }
                 }
-            }
-        });
+            });
 
-        setDeckCards(cards);
+            setDeckCards(cards);
+        } finally {
+            setIsLoadingDeck(false)
+        }
     };
 
     return (
@@ -127,7 +157,7 @@ function DeckList() {
                     <div className='deck_controls'>
                         <input type='submit' value='Clear' className='Clear' onClick={handleClear} />
                         <input type='submit' value='Save Deck' className='SaveDeck' onClick={handleSaveDeck} />
-                        <input type='submit' value='Get Decks' className='getDeck' onClick={handleGetDeck} />
+                        <input type='submit' value={isLoadingDecks ? 'Loading...' : 'Get Decks'} className='getDeck' onClick={handleGetDeck} disabled={isLoadingDecks} />
                         {saveError && <p className='deck-error'>{saveError}</p>}
 
                         <p>Total Cost of your deck is ${totalCost.toFixed(2)}</p>
@@ -137,8 +167,8 @@ function DeckList() {
                                 <ul>
                                     {fetchedDecks.map((deck, idx) => (
                                         <li key={idx}>
-                                            <button onClick={() => loadDeck(deck)}>
-                                                {deck.name}
+                                            <button onClick={() => loadDeck(deck)} disabled={isLoadingDeck}>
+                                                {isLoadingDeck ? 'Loading...' : deck.name}
                                             </button>
                                         </li>
                                     ))}
@@ -149,7 +179,7 @@ function DeckList() {
                     <div className='DeckSection'>
 
                         {uniqueCards.map((card) => (
-                            <div key={card.productID} className="deck-card">
+                            <div key={card.productID} className="deck-card" onClick={() => handleRemoveCard(card.productID)} title="Click to remove one copy">
                                 <img src={card.img} alt={card.cardName} className="deck-card-img" />
                                 <p className='count_of_cards'>{countOfCards[card.productID]}</p>
                             </div>
@@ -176,7 +206,7 @@ function DeckList() {
                         {saveError && <p className='deck-error'>{saveError}</p>}
                         <div className='save-modal-actions'>
                             <button className='save-modal-cancel' onClick={handleCancelSave}>Cancel</button>
-                            <button className='save-modal-confirm' onClick={handleConfirmSave}>Save</button>
+                            <button className='save-modal-confirm' onClick={handleConfirmSave} disabled={isSaving}>{isSaving ? 'Saving...' : 'Save'}</button>
                         </div>
                     </div>
                 </div>
