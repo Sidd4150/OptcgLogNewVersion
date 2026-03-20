@@ -4,7 +4,7 @@ import Footer from "../components/footer"
 
 
 //Card display so I can use cardlist without headers in the decklist
-export default function cardDisplay() {
+export default function CardDisplay() {
     return (
         <>
             <Header />

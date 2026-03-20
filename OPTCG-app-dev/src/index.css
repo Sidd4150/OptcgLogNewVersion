@@ -38,19 +38,58 @@ header .nav-links a:hover {
   border-color: rgb(0, 0, 0);
 }
 
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: rgb(90, 115, 119);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  header .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  header .nav-links.nav-open {
+    display: flex;
+  }
+}
+
 /*-- DeckList css-- */
 .layout {
   display: flex;
   background-color: #5f7c82;
+  height: calc(100vh - 90px);
 }
 
 .Deck_Wrapper {
   display: flex;
   flex-direction: column;
-  height: fit-content;
   flex: 2;
   width: 100%;
   padding: 10px;
+  overflow-y: auto;
+  height: 100%;
 }
 
 
@@ -98,6 +137,9 @@ header .nav-links a:hover {
   font-size: 1.2rem;
   text-align: center;
   height: 20vh;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .Clear {
@@ -130,7 +172,8 @@ header .nav-links a:hover {
 .CardDisplay_D {
   flex: 1.25;
   background-color: #f0f0f0;
-
+  overflow-y: auto;
+  height: 100%;
 }
 
 
@@ -214,14 +257,9 @@ header .nav-links a:hover {
   background-image: url("./assets/waves.png");
   background-size: 300px 200px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 20px;
-  gap: 15px;
-
-
-
-
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 40px;
 }
 
 .hoverCard {
@@ -269,25 +307,30 @@ header .nav-links a:hover {
 
 ul {
   display: grid;
-  grid-template-columns: repeat(5, 20%);
-  justify-content: center;
-  gap: 10px;
-  padding: 0%;
-  margin: 0%;
+  grid-template-columns: repeat(auto-fill, 190px);
+  gap: 12px;
+  padding: 0;
+  margin: 0 auto;
+  list-style: none;
+  width: fit-content;
+  max-width: 100%;
 }
 
-
-
+li.cards {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
 
 .cardIMG {
   width: 100%;
-  max-width: 200px;
   height: auto;
   border-radius: 5%;
-  margin-top: 5%;
-  margin-bottom: 5%;
+  display: block;
   transition: transform 0.3s ease-in-out;
-
 }
 
 
@@ -295,80 +338,201 @@ ul {
 
 
 /*--Modal Card Area--*/
+/* Using a clean, modern color palette */
+:root {
+  --sigma-teal: #5a797e;
+  /* Keeping your base color */
+  --bg-white: #ffffff;
+  --text-dark: #333333;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  /* Modern shorthand for top/left/right/bottom: 0 */
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  /* Modern blur effect */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 20px;
 }
 
 .card_info {
   display: grid;
-  background: rgb(90, 121, 126);
-  width: 50%;
-  padding: 1rem;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.bigName {
-  text-align: left;
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-
-}
-
-.bigDesc {
-
-  text-align: left;
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.bigColor {
-  text-align: left;
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-
-}
-
-.bigPrice {
-  text-align: left;
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-  position: absolute;
-
-  top: 250px;
-
-  right: 500px;
-
-  font-size: 1.2rem;
-  font-weight: bold;
-
-
+  /* Creates two columns: image on left, details on right */
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  background: var(--sigma-teal);
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  color: var(--text-dark);
 }
 
 .large-image {
-
-  width: 200px;
+  width: 100%;
+  max-width: 300px;
   height: auto;
-  border-radius: 10px;
-  align-items: left;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  justify-self: center;
+}
+
+/* Container for text to keep it organized */
+.details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.bigName {
+  font-size: 1.8rem;
+  margin: 0;
+  background-color: var(--bg-white);
+  padding: 15px;
+  border-radius: 12px;
+  border-left: 5px solid #2c3e50;
+}
+
+.bigDesc {
+  flex-grow: 1;
+  /* Pushes price to the bottom */
+  background-color: var(--bg-white);
+  padding: 15px;
+  border-radius: 12px;
+  line-height: 1.6;
+}
+
+.bigPrice {
+  /* Removed absolute positioning for better responsiveness */
+  background-color: #2ecc71;
+  /* Success green for price */
+  color: white;
+  padding: 12px 20px;
+  border-radius: 50px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  align-self: flex-start;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustment for mobile */
+@media (max-width: 768px) {
+  .card_info {
+    grid-template-columns: 1fr;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .layout {
+    flex-direction: column;
+  }
+
+  .deck_controls {
+    height: auto;
+    padding: 10px;
+  }
+
+  ul {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
 }
 
 .cardIMG:hover {
   box-shadow: 5px 5px 15px rgba(255, 255, 255, 0.5);
   transform: scale(1.05);
+}
+
+/*--Loading / Error States--*/
+.card-status {
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 1.2rem;
+  color: #5f7c82;
+  font-weight: bold;
+}
+
+.card-status--error {
+  color: #e74c3c;
+}
+
+/*--Save Deck Modal--*/
+.save-deck-modal {
+  background: var(--sigma-teal);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.save-deck-modal h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.4rem;
+}
+
+.deck-name-input {
+  padding: 10px 15px;
+  border-radius: 50px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.save-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.save-modal-cancel,
+.save-modal-confirm {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.save-modal-cancel {
+  background-color: #ffffff33;
+  color: #ffffff;
+}
+
+.save-modal-cancel:hover {
+  background-color: #ffffff55;
+}
+
+.save-modal-confirm {
+  background-color: #2ecc71;
+  color: #ffffff;
+}
+
+.save-modal-confirm:hover {
+  background-color: #27ae60;
+}
+
+.deck-error {
+  color: #ff4d4d;
+  background-color: #fff0f0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 /*--Footer Styling -- */
